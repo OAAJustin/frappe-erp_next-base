@@ -1,0 +1,80 @@
+services:
+  db:
+    image: mariadb:10.11
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --innodb-file-per-table=1
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis-cache:
+    image: redis:7-alpine
+    volumes:
+      - redis-cache-data:/data
+
+  redis-queue:
+    image: redis:7-alpine
+    volumes:
+      - redis-queue-data:/data
+
+  backend:
+    image: frappe/erpnext:${ERPNEXT_VERSION}
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      REDIS_CACHE: ${REDIS_CACHE}
+      REDIS_QUEUE: ${REDIS_QUEUE}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - logs:/home/frappe/frappe-bench/logs
+
+  frontend:
+    image: frappe/erpnext:${ERPNEXT_VERSION}
+    command: nginx-entrypoint.sh
+    environment:
+      BACKEND: backend:8000
+      FRAPPE_SITE_NAME_HEADER: $$host
+      UPSTREAM_REAL_IP_ADDRESS: 127.0.0.1
+      UPSTREAM_REAL_IP_HEADER: X-Forwarded-For
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+    ports:
+      - "${HTTP_PUBLISH_PORT}:8080"
+
+  queue-long:
+    image: frappe/erpnext:${ERPNEXT_VERSION}
+    command: bench worker --queue long
+    environment:
+      DB_HOST: ${DB_HOST}
+      REDIS_QUEUE: ${REDIS_QUEUE}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  queue-short:
+    image: frappe/erpnext:${ERPNEXT_VERSION}
+    command: bench worker --queue short
+    environment:
+      DB_HOST: ${DB_HOST}
+      REDIS_QUEUE: ${REDIS_QUEUE}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+  scheduler:
+    image: frappe/erpnext:${ERPNEXT_VERSION}
+    command: bench scheduler
+    environment:
+      DB_HOST: ${DB_HOST}
+      REDIS_QUEUE: ${REDIS_QUEUE}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+
+volumes:
+  db-data:
+  redis-cache-data:
+  redis-queue-data:
+  sites:
+  logs:
