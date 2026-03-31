@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [![Build Stable](https://github.com/frappe/frappe_docker/actions/workflows/build_stable.yml/badge.svg)](https://github.com/frappe/frappe_docker/actions/workflows/build_stable.yml)
 [![Build Develop](https://github.com/frappe/frappe_docker/actions/workflows/build_develop.yml/badge.svg)](https://github.com/frappe/frappe_docker/actions/workflows/build_develop.yml)
 
@@ -88,3 +89,6 @@ This repository is only for container related stuff. You also might want to cont
 - [Frappe framework](https://github.com/frappe/frappe#contributing),
 - [ERPNext](https://github.com/frappe/erpnext#contributing),
 - [Frappe Bench](https://github.com/frappe/bench).
+=======
+# frappe-erp_next-base
+>>>>>>> f196d8c6690d94c52fb18a13d9e5a312d5ed102d
