@@ -9,11 +9,10 @@ sudo docker compose pull
 sudo docker compose up -d
 
 # 4. Wait for Database and build the site
-sleep 60
+sleep 25
 sudo docker compose exec backend bench new-site ${SITE_NAME} \
   --admin-password ${ADMIN_PASSWORD} \
   --db-root-password ${DB_PASSWORD} \
+  --db-host db \
   --install-app erpnext --force
 
-# 5. Set as default
-sudo docker compose exec backend bench set-default-site ${SITE_NAME}
