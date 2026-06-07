@@ -65,7 +65,7 @@ services:
 
   scheduler:
     image: frappe/erpnext:${ERPNEXT_VERSION}
-    command: bench scheduler
+    command: bench schedule
     environment:
       DB_HOST: ${DB_HOST}
       REDIS_QUEUE: ${REDIS_QUEUE}
