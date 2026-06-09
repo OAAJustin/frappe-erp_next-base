@@ -14,8 +14,4 @@ sudo docker compose exec backend bench new-site ${SITE_NAME} \
   --admin-password ${ADMIN_PASSWORD} \
   --db-root-password ${DB_PASSWORD} \
   --db-host db \
-  --install-app erpnext --force \
-  --install-app hrms --force \
-  --install-app insights --force \
-  --install-app gameplan --force \
-  --install-app lms --force
+  --install-app erpnext --force 
